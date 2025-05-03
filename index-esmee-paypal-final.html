@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Roulette Spéciale Paiement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(-45deg, #fceabb, #f8b500, #fceabb, #f8b500);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+    }
+    @keyframes gradient {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    h1 {
+      margin-top: 40px;
+      font-size: 2.8rem;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+    canvas {
+      display: block;
+      margin: 40px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-radius: 50%;
+    }
+    #spinBtn {
+      background: #fff;
+      color: #f8b500;
+      padding: 14px 32px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    #spinBtn:hover {
+      background: #f8b500;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎰 Lancer la Roulette !</h1>
+<canvas id="rouletteCanvas" width="500" height="500"></canvas>
+<button id="spinBtn">Lancer la roulette</button>
+
+<script>
+  window.onload = function () {
+    let theWheel = new Winwheel({
+      canvasId: 'rouletteCanvas',
+      numSegments: 3,
+      segments: [
+        { fillStyle: '#fd79a8', text: 'Me voir ❤️' },
+        { fillStyle: '#55efc4', text: 'Média long ❤️' },
+        { fillStyle: '#a29bfe', text: 'Me voir ❤️' }
+      ],
+      animation: {
+        type: 'spinToStop',
+        duration: 5,
+        spins: 6,
+        callbackFinished: handleResult
+      }
+    });
+
+    document.getElementById('spinBtn').addEventListener('click', function () {
+      theWheel.stopAnimation(false);
+      theWheel.rotationAngle = 0;
+      theWheel.draw();
+      theWheel.startAnimation();
+    });
+
+    function handleResult(segment) {
+      alert("🎉 Gagné : " + segment.text);
+      let url = "#";
+      if (segment.text === "Me voir ❤️") {
+        url = "https://paypal.me/EsmeeSlovakiaa859/20"; // remplace par ton vrai lien PayPal
+      } else if (segment.text === "Média long ❤️") {
+        url = "https://paypal.me/EsmeeSlovakiaa859/10"; // remplace par ton vrai lien PayPal
+      } else {
+        url = "https://paypal.me/EsmeeSlovakiaa859/5"; // par défaut
+      }
+      window.location.href = url;
+    }
+  }
+</script>
+
+</body>
+</html>
