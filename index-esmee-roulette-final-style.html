@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Roulette Moderne</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, #fdfbfb 0%, #ebedee 100%);
+      text-align: center;
+      color: #333;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin-top: 30px;
+    }
+    .wheel-wrapper {
+      position: relative;
+      width: 500px;
+      margin: 40px auto;
+    }
+    canvas {
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      border-radius: 50%;
+    }
+    .pointer {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #f8b500;
+    }
+    #spinBtn {
+      background: linear-gradient(145deg, #f8b500, #facc22);
+      color: white;
+      padding: 14px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #spinBtn:hover {
+      background: linear-gradient(145deg, #facc22, #f8b500);
+    }
+    #paySection {
+      margin-top: 20px;
+      display: none;
+    }
+    #payBtn {
+      background-color: #0070ba;
+      color: white;
+      padding: 12px 26px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎰 Roulette Exclusive</h1>
+
+<div class="wheel-wrapper">
+  <div class="pointer"></div>
+  <canvas id="rouletteCanvas" width="500" height="500"></canvas>
+</div>
+
+<button id="spinBtn">Lancer la roulette</button>
+
+<div id="paySection">
+  <p id="resultText"></p>
+  <a id="payBtn" href="#" target="_blank">Payer maintenant</a>
+</div>
+
+<script>
+  window.onload = function () {
+    const theWheel = new Winwheel({
+      outerRadius: 220,
+      innerRadius: 40,
+      strokeStyle: '#222',
+      lineWidth: 4,
+      pointerAngle: 0,
+      canvasId: 'rouletteCanvas',
+      numSegments: 3,
+      segments: [
+        { fillStyle: '#ff7675', text: 'Me voir - 20€', value: 20 },
+        { fillStyle: '#74b9ff', text: 'Cam - 10€', value: 10 },
+        { fillStyle: '#55efc4', text: 'Média - 5€', value: 5 }
+      ],
+      animation: {
+        type: 'spinToStop',
+        duration: 6,
+        spins: 8,
+        callbackFinished: handleResult
+      },
+      textFontSize: 24,
+      textFontFamily: 'Poppins',
+      textFillStyle: '#ffffff',
+      textAlignment: 'center',
+      textMargin: 40,
+      textOrientation: 'horizontal',
+      textAlignment: 'center',
+      textMargin: 20
+    });
+
+    const spinBtn = document.getElementById("spinBtn");
+    spinBtn.addEventListener('click', function () {
+      theWheel.stopAnimation(false);
+      theWheel.rotationAngle = 0;
+      theWheel.draw();
+      theWheel.startAnimation();
+      spinBtn.disabled = true;
+      spinBtn.innerText = "Essai utilisé";
+      spinBtn.style.backgroundColor = "#ccc";
+      spinBtn.style.cursor = "not-allowed";
+    });
+
+    function handleResult(segment) {
+      const amount = segment.value;
+      const label = segment.text;
+      const paypalLink = "https://paypal.me/EsmeeSlovakiaa859/" + amount;
+
+      document.getElementById("resultText").innerText = "🎉 Gagné : " + label;
+      const payBtn = document.getElementById("payBtn");
+      payBtn.href = paypalLink;
+      payBtn.innerText = "Payer maintenant " + amount + " €";
+      document.getElementById("paySection").style.display = "block";
+
+      payBtn.onclick = function () {
+        payBtn.innerText = "Lien déjà utilisé";
+        payBtn.style.backgroundColor = "#ccc";
+        payBtn.style.cursor = "not-allowed";
+        payBtn.style.pointerEvents = "none";
+      };
+    }
+  }
+</script>
+
+</body>
+</html>
